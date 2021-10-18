@@ -130,7 +130,7 @@ Delta_F5 = (abs(M(:,5) - Provided_F5) / Provided_F5) * 100;
 
  %Position anaylsis graph--------------------------------------------
 
-%Define Y-points of graph (t3,r3,r4,r5)
+%Define Y-points of graph (t3,r3,r4,r5,h3,f3,f4,f5)
 t3=M(:,2)';
 R3=M(:,3)';
 R4=M(:,4)';
