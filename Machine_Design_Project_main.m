@@ -23,7 +23,7 @@ R6=1.85;
 t6=(63*(pi/180));
 
 %Import .txt data file as a single matrix
-File_Data = readmatrix('data');
+File_Data = readmatrix('data1');
 
 %Define matrix values to variables to sync two theta and calculate % error
 %for data validation
@@ -39,7 +39,7 @@ Provided_F3 =File_Data(:,7);
 Provided_F4 =File_Data(:,8);
 Provided_F5 =File_Data(:,9);
 
-%Data Imported from excel for First Order %error calculation
+%Data Imported from excel for Second Order %error calculation
 %H3P =File_Data(:,10)';
 %F3P =File_Data(:,11)';
 %F4P =File_Data(:,12)';
@@ -62,7 +62,7 @@ for t2 = theta2;
     r = r+1;
 
     %Newton Raphson method
-    while (.00000000005 < R1*exp(1i*(pi/2))+R4*exp(1i*0)+R3*exp(1i*t3)-R2*exp(1i*t2)) | (.00000000005 < R2*exp(1i*t2)-R5*exp(1i*t3)-R6*exp(1i*t6))
+    while (.00005 < R1*exp(1i*(pi/2))+R4*exp(1i*0)+R3*exp(1i*t3)-R2*exp(1i*t2)) | (.00005 < R2*exp(1i*t2)-R5*exp(1i*t3)-R6*exp(1i*t6))
         %^^^^ check if current estimate is close enough using VLE's
         I = I+1;
 
