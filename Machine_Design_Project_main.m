@@ -62,7 +62,7 @@ for t2 = theta2;
     r = r+1;
 
     %Newton Raphson method
-    while (.0005 < R1*exp(1i*(pi/2))+R4*exp(1i*0)+R3*exp(1i*t3)-R2*exp(1i*t2)) | (.0005 < R2*exp(1i*t2)-R5*exp(1i*t3)-R6*exp(1i*t6))
+    while (.00000000005 < R1*exp(1i*(pi/2))+R4*exp(1i*0)+R3*exp(1i*t3)-R2*exp(1i*t2)) | (.00000000005 < R2*exp(1i*t2)-R5*exp(1i*t3)-R6*exp(1i*t6))
         %^^^^ check if current estimate is close enough using VLE's
         I = I+1;
 
