@@ -89,16 +89,18 @@ for t2 = theta2;
 end
 M;
 % First Order Coefficients-----------------------------------------------
-b1= -[R2*sin(t2);
-    -R2*cos(t2);
-    -R2*sin(t2);
-    R2*cos(t2)];
+% b1= -[R2*sin(t2);
+%     -R2*cos(t2);
+%     -R2*sin(t2);
+%     R2*cos(t2)];
+%iterate through each data set
 for iter = 1:size(M,1)
+    % A position matrix
     A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
         M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
         M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
         -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
-
+    %b first order matrix (partial diff. wrt theta 2)
     b1= -[R2*sin(M(iter,1));
         -R2*cos(M(iter,1));
         -R2*sin(M(iter,1));
@@ -217,7 +219,7 @@ plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', t
 % 
 plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
 %Add legend to make the different lines distinguishable 
-legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)', 'Root (all lines)','','','','','','','','Local min or max (all lines)','','','','','' )
+legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Local min or max (all lines)');
 %Define what the graph is
 title('First Order Kinematic Coefficient vs Input')
 %Label the x-axis
