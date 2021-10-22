@@ -22,11 +22,12 @@ t5=(-101*(pi/180));
 R6=1.85; 
 t6=(63*(pi/180));
 
+RCG3 = 1.3;
+
 %Import .txt data file as a single matrix
 File_Data = readmatrix('data1');
 
 %Define matrix values to variables to sync two theta and calculate % error
-%for data validation
 theta2_Pre = File_Data(:,1');
 theta3 = File_Data(:,2) ;
 Provided_R3 =File_Data(:,3);
@@ -40,16 +41,18 @@ Provided_F4 =File_Data(:,8);
 Provided_F5 =File_Data(:,9);
 
 %Data Imported from excel for Second Order %error calculation
-%H3P =File_Data(:,10)';
-%F3P =File_Data(:,11)';
-%F4P =File_Data(:,12)';
-%F5P =File_Data(:,13)';
+Provided_H3P =File_Data(:,10);
+Provided_F3P =File_Data(:,11);
+Provided_F4P =File_Data(:,12);
+Provided_F5P =File_Data(:,13);
 
 %Position Analysis -------------------------------------------------------
 
 %Container for position solutions
 M = [];
-
+RG2 = [];
+RG4 = [];
+RG3 = [];
 %Iterators
 I = 0;
 r = 0;
@@ -87,13 +90,8 @@ for t2 = theta2;
     %Results stored in matrix
     M(r,1:5) = [t2,t3,R3,R4,R5];
 end
-M;
 % First Order Coefficients-----------------------------------------------
-% b1= -[R2*sin(t2);
-%     -R2*cos(t2);
-%     -R2*sin(t2);
-%     R2*cos(t2)];
-%iterate through each data set
+%calculate for each data set
 for iter = 1:size(M,1)
     % A position matrix
     A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
@@ -105,12 +103,40 @@ for iter = 1:size(M,1)
         -R2*cos(M(iter,1));
         -R2*sin(M(iter,1));
         R2*cos(M(iter,1))];
-    
+    %x = A\b
     M(iter,6:9) = A\b1;
 end
 %-------------------------------------------------------------------------
 
-%Data Validation by checking our calculations against the provided Excel
+% Second Order Coefficients-----------------------------------------------
+%calculate for each data set
+for iter = 1:size(M,1)
+    % A position matrix
+    A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+        M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+        M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+        -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+    %b second order matrix (second partial diff. wrt theta 2)
+    b2= -[R2*cos(M(iter,1))- M(iter,3)*(M(iter,6)^2)*cos(M(iter,2)) - 2*M(iter,7)*M(iter,6)*sin(M(iter,2));
+        R2*sin(M(iter,1))- M(iter,3)*(M(iter,6)^2)*sin(M(iter,2)) + 2*M(iter,7)*M(iter,6)*cos(M(iter,2));
+        -R2*cos(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*cos(M(iter,2)) + 2*M(iter,9)*M(iter,6)*sin(M(iter,2));
+        -R2*sin(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*sin(M(iter,2)) - 2*M(iter,9)*M(iter,6)*cos(M(iter,2))];
+    %x = A\b
+    M(iter,10:13) = A\b2;
+end
+%-------------------------------------------------------------------------
+%CG position
+for iter = 1:size(M,1)
+    RG2(iter,1:3) = [M(iter,1),0,0];
+    RG4(iter,1:3) = [M(iter,1),M(iter,4),R1];
+    RG3(iter,1:3) = [M(iter,1),(R1*[0 1]+M(iter,4)*[1 0]+RCG3*[cos(M(iter,2)) sin(M(iter,2))])];
+end
+
+
+
+
+
+%checking our calculations against the provided Excel
 %Sheet data, in the form of percent error
 Delta_t2 = (abs(M(:,1) - theta2_Pre) / theta2_Pre) * 100;
 Delta_t3 = (abs(M(:,2) - Provided_R3) / Provided_R3) * 100;
@@ -118,17 +144,17 @@ Delta_R3 = (abs(M(:,3) - Provided_R3) / Provided_R3) * 100;
 Delta_R4 = (abs(M(:,4) - Provided_R4) / Provided_R4) * 100;
 Delta_R5 = (abs(M(:,5) - Provided_R5) / Provided_R5) * 100; 
 
-%First Coefficients validation 
-Delta_H3 = (abs(M(:,2) - Provided_H3) / Provided_H3) * 100;
-Delta_F3 = (abs(M(:,3) - Provided_F3) / Provided_F3) * 100; 
-Delta_F4 = (abs(M(:,4) - Provided_F4) / Provided_F4) * 100;
-Delta_F5 = (abs(M(:,5) - Provided_F5) / Provided_F5) * 100; 
+%First Coefficients 
+Delta_H3 = (abs(M(:,6) - Provided_H3) / Provided_H3) * 100;
+Delta_F3 = (abs(M(:,7) - Provided_F3) / Provided_F3) * 100; 
+Delta_F4 = (abs(M(:,8) - Provided_F4) / Provided_F4) * 100;
+Delta_F5 = (abs(M(:,9) - Provided_F5) / Provided_F5) * 100; 
 
-%Second Coefficients validation 
-%Delta_H3 = (abs(M(:,2) - Provided_H3) / Provided_H3) * 100;
-%Delta_F3 = (abs(M(:,3) - Provided_F3) / Provided_F3) * 100; 
-%Delta_F4 = (abs(M(:,4) - Provided_F4) / Provided_F4) * 100;
-%Delta_F5 = (abs(M(:,5) - Provided_F5) / Provided_F5) * 100; 
+%Second Coefficients
+Delta_H3P = (abs(M(:,10) - Provided_H3P) / Provided_H3P) * 100;
+Delta_F3P = (abs(M(:,11) - Provided_F3P) / Provided_F3P) * 100; 
+Delta_F4P = (abs(M(:,12) - Provided_F4P) / Provided_F4P) * 100;
+Delta_F5P = (abs(M(:,13) - Provided_F5P) / Provided_F5P) * 100; 
 
  %Position anaylsis graph--------------------------------------------
 
