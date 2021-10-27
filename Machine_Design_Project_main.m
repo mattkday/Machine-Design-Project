@@ -167,6 +167,10 @@ H3=M(:,6)';
 F3=M(:,7)';
 F4=M(:,8)'; 
 F5=M(:,9)'; 
+H3P=M(:,10)';
+F3P=M(:,11)';
+F4P=M(:,12)';
+F5P=M(:,13)';
 %Local minimums and maximums for theta3, R3, R4, and R5 which are also the
 %link limits for the unknowns
 
@@ -248,6 +252,35 @@ plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F
 legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Local min or max (all lines)');
 %Define what the graph is
 title('First Order Kinematic Coefficient vs Input')
+%Label the x-axis
+xlabel('\theta_2 (rad)')
+%Label the y-axis
+ylabel('Outputs')
+%Add grids to make data easier to read
+grid on 
+grid minor
+%Used to convert the numerical radian to the simplified version original
+%Sets the increment of values
+set(gca,'XTick',0:pi/4:2*pi) 
+%Defines what the major x-axis grid line should be called
+set(gca,'XTickLabel',{'0','\pi/4','\pi/2','3\pi/4','\pi','5\pi/4','3\pi/2','7\pi/4','2\pi'})
+
+
+%Second order Kinematic Coefficient vs input graph-----------------------
+figure(3) %To setup different data on different plots
+hold on   %Allows multiple data lines on one figure
+
+%Plot the Second Order Kinematic Coefficients
+plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
+
+%Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
+ %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
+plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
+
+%Add legend to make the different lines distinguishable 
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)');
+%Define what the graph is
+title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
 xlabel('\theta_2 (rad)')
 %Label the y-axis
