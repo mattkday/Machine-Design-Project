@@ -257,7 +257,7 @@ plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
 plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
 
 %Add legend to make the different lines distinguishable 
-legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Zeros');
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Roots');
 %Define what the graph is
 title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
