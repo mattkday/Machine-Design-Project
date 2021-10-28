@@ -249,7 +249,7 @@ plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', t
 % 
 plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
 %Add legend to make the different lines distinguishable 
-legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Local min or max (all lines)');
+legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Roots (all lines)','','','','','','','Local min or max (all lines)');
 %Define what the graph is
 title('First Order Kinematic Coefficient vs Input')
 %Label the x-axis
@@ -278,7 +278,7 @@ plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
 plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
 
 %Add legend to make the different lines distinguishable 
-legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)');
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Roots (all lines)');
 %Define what the graph is
 title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
@@ -307,7 +307,6 @@ fprintf('Length 4 Upper Limit %s\n',(max(M(:,4))))
 
 fprintf('Length 5 Lower Limit %s\n',(min(M(:,5))))
 fprintf('Length 5 Upper Limit %s\n',(max(M(:,5))))
-
 
 
 
