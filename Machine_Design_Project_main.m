@@ -180,14 +180,14 @@ F5_max = islocalmax(F5);
 %Allows multiple data lines on one figure
 hold on  
 
-%Plot the Position Analysis data
+%Plot the computed Position Analysis data
 plot(theta2, t3, 'k', theta2, R3, 'b', theta2, R4, 'm', theta2, R5, 'r')
 
 %Plot the local mins and maxes for data validation (used to compare roots on the First Order Graph)
-plot(theta2(t3_min), t3(t3_min), 'k*', theta2(t3_max), t3(t3_max), 'k*', theta2(R3_min), R3(R3_min), 'b*', theta2(R3_max), R3(R3_max), 'b*', theta2(R4_min), R4(R4_min), 'm*', theta2(R4_max), R4(R4_max), 'm*',  theta2(R5_min), R5(R5_min), 'r*', theta2(R5_max), R5(R5_max), 'r*')
+plot(theta2(t3_min), t3(t3_min), 'ks', theta2(t3_max), t3(t3_max), 'ks', theta2(R3_min), R3(R3_min), 'bs', theta2(R3_max), R3(R3_max), 'bs', theta2(R4_min), R4(R4_min), 'ms', theta2(R4_max), R4(R4_max), 'ms',  theta2(R5_min), R5(R5_min), 'rs', theta2(R5_max), R5(R5_max), 'rs')
 
 %Add legend to make the different lines distinguishable 
-legend('theta3 (rad)', 'R3 (in)','R4 (in)','R5 (in)','Local min or max (all lines)')
+legend('theta3 (rad)', 'R3 (in)','R4 (in)','R5 (in)','Min and Max')
 
 %Define what the graph is
 title('Position Analysis')
@@ -221,11 +221,11 @@ plot(theta2, H3,'k', theta2, F3, 'b', theta2, F4, 'm', theta2, F5, 'r')
 plot(theta2(t3_min), 0, 'k*',theta2(H3_min), H3(H3_min), 'ks' )
 %Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
  %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
-plot(theta2(t3_min), 0, 'ks',theta2(R3_min), 0, 'bs', theta2(R3_max), 0, 'bs', theta2(R4_max), 0, 'ms',  theta2(R5_min), 0, 'rs', theta2(R5_max), 0, 'rs')
+plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', theta2(R4_max), 0, 'm*',  theta2(R5_min), 0, 'r*', theta2(R5_max), 0, 'r*')
 
 %Plot the local mins and maxes for data validation of the Second Order Graph
 % 
-plot(theta2(H3_min), H3(H3_min), 'k*', theta2(H3_max), H3(H3_max), 'k*',theta2(F3_min), F3(F3_min), 'b*', theta2(F3_max), F3(F3_max), 'b*', theta2(F4_min), F4(F4_min), 'm*', theta2(F4_max), F4(F4_max), 'm*',  theta2(F5_min), F5(F5_min), 'r*', theta2(F5_max), F5(F5_max), 'r*')
+plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
 
 %Add legend to make the different lines distinguishable 
 legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Zeros','Min and Max');
