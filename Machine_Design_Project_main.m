@@ -380,6 +380,3 @@ ax = A*x
 b = A*x < b2 + .0005 & A*x > b2 - .0005
 
 end
-
-
->>>>>>> parent of a621121 (Merge branch '2nd-order' of https://github.com/mattkday/Machine-Design-Project into 2nd-order)
