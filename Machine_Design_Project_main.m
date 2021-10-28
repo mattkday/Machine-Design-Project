@@ -221,11 +221,11 @@ plot(theta2, H3,'k', theta2, F3, 'b', theta2, F4, 'm', theta2, F5, 'r')
 plot(theta2(t3_min), 0, 'k*',theta2(H3_min), H3(H3_min), 'ks' )
 %Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
  %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
-plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', theta2(R4_max), 0, 'm*',  theta2(R5_min), 0, 'r*', theta2(R5_max), 0, 'r*')
+plot(theta2(t3_min), 0, 'ks',theta2(R3_min), 0, 'bs', theta2(R3_max), 0, 'bs', theta2(R4_max), 0, 'ms',  theta2(R5_min), 0, 'rs', theta2(R5_max), 0, 'rs')
 
 %Plot the local mins and maxes for data validation of the Second Order Graph
 % 
-plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
+plot(theta2(H3_min), H3(H3_min), 'k*', theta2(H3_max), H3(H3_max), 'k*',theta2(F3_min), F3(F3_min), 'b*', theta2(F3_max), F3(F3_max), 'b*', theta2(F4_min), F4(F4_min), 'm*', theta2(F4_max), F4(F4_max), 'm*',  theta2(F5_min), F5(F5_min), 'r*', theta2(F5_max), F5(F5_max), 'r*')
 
 %Add legend to make the different lines distinguishable 
 legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Zeros','Min and Max');
@@ -257,7 +257,7 @@ plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
 plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
 
 %Add legend to make the different lines distinguishable 
-legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Roots');
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Zeros');
 %Define what the graph is
 title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
