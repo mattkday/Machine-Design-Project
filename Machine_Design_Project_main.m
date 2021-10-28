@@ -217,7 +217,7 @@ hold on   %Allows multiple data lines on one figure
 
 %Plot the First Order Kinematic Coefficients
 plot(theta2, H3,'k', theta2, F3, 'b', theta2, F4, 'm', theta2, F5, 'r')
-%to properly align ledgend
+%To properly align legend
 plot(theta2(t3_min), 0, 'k*',theta2(H3_min), H3(H3_min), 'ks' )
 %Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
  %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
