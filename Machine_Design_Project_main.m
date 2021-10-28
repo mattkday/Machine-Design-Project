@@ -309,3 +309,8 @@ fprintf('Length 5 Lower Limit %s\n',(min(M(:,5))))
 fprintf('Length 5 Upper Limit %s\n',(max(M(:,5))))
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> parent of 21c7f8b (validation)
