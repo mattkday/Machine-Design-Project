@@ -2,7 +2,7 @@
 % Kaleb Coleman, Matthew Day, Scott Meyers, Andrew Peterson
 % October 28, 2021
 % ME4133
-% Project III
+% Project IV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Preliminaries
@@ -23,6 +23,7 @@ R6=1.85;
 t6=(63*(pi/180));
 
 RCG3 = 1.3;
+
 
 %Import .txt data file as a single matrix
 File_Data = readmatrix('data1');
@@ -132,31 +133,7 @@ for iter = 1:size(M,1)
     RG3(iter,1:3) = [M(iter,1),(R1*[0 1]+M(iter,4)*[1 0]+RCG3*[cos(M(iter,2)) sin(M(iter,2))])];
 end
 
-
-
-
-
-%checking our calculations against the provided Excel
-%Sheet data, in the form of percent error
-Delta_t2 = (abs(M(:,1) - theta2_Pre) / theta2_Pre) * 100;
-Delta_t3 = (abs(M(:,2) - Provided_R3) / Provided_R3) * 100;
-Delta_R3 = (abs(M(:,3) - Provided_R3) / Provided_R3) * 100; 
-Delta_R4 = (abs(M(:,4) - Provided_R4) / Provided_R4) * 100;
-Delta_R5 = (abs(M(:,5) - Provided_R5) / Provided_R5) * 100; 
-
-%First Coefficients 
-Delta_H3 = (abs(M(:,6) - Provided_H3) / Provided_H3) * 100;
-Delta_F3 = (abs(M(:,7) - Provided_F3) / Provided_F3) * 100; 
-Delta_F4 = (abs(M(:,8) - Provided_F4) / Provided_F4) * 100;
-Delta_F5 = (abs(M(:,9) - Provided_F5) / Provided_F5) * 100; 
-
-%Second Coefficients
-Delta_H3P = (abs(M(:,10) - Provided_H3P) / Provided_H3P) * 100;
-Delta_F3P = (abs(M(:,11) - Provided_F3P) / Provided_F3P) * 100; 
-Delta_F4P = (abs(M(:,12) - Provided_F4P) / Provided_F4P) * 100;
-Delta_F5P = (abs(M(:,13) - Provided_F5P) / Provided_F5P) * 100; 
-
- %Position anaylsis graph--------------------------------------------
+%Position anaylsis graph--------------------------------------------
 
 %Define Y-points of graph (t3,r3,r4,r5,h3,f3,f4,f5)
 t3=M(:,2)';
@@ -249,7 +226,7 @@ plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', t
 % 
 plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
 %Add legend to make the different lines distinguishable 
-legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Roots (all lines)','','','','','','','Local min or max (all lines)');
+legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Local min or max (all lines)');
 %Define what the graph is
 title('First Order Kinematic Coefficient vs Input')
 %Label the x-axis
@@ -278,7 +255,7 @@ plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
 plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
 
 %Add legend to make the different lines distinguishable 
-legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Roots (all lines)');
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)');
 %Define what the graph is
 title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
@@ -310,7 +287,99 @@ fprintf('Length 5 Upper Limit %s\n',(max(M(:,5))))
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> parent of 21c7f8b (validation)
+=======
+%VALIDATION---------------------------------------------------------------
+%First Order
+Valfirst(M,R2,1)
+Valfirst(M,R2,40)
+Valfirst(M,R2,169)
+Valfirst(M,R2,220)
+Valfirst(M,R2,115)
+Valfirst(M,R2,341)
+
+%Second Order
+Valsec(M,R2,1)
+Valsec(M,R2,40)
+Valsec(M,R2,169)
+Valsec(M,R2,220)
+Valsec(M,R2,115)
+Valsec(M,R2,341)
+%--------------------------------------------------------------------------
+% %checking our calculations against the provided Excel
+% %Sheet data, in the form of percent error
+% Delta_t2 = (abs(M(:,1) - theta2_Pre) / theta2_Pre) * 100;
+% Delta_t3 = (abs(M(:,2) - Provided_R3) / Provided_R3) * 100;
+% Delta_R3 = (abs(M(:,3) - Provided_R3) / Provided_R3) * 100; 
+% Delta_R4 = (abs(M(:,4) - Provided_R4) / Provided_R4) * 100;
+% Delta_R5 = (abs(M(:,5) - Provided_R5) / Provided_R5) * 100; 
+% 
+% %First Coefficients 
+% Delta_H3 = (abs(M(:,6) - Provided_H3) / Provided_H3) * 100;
+% Delta_F3 = (abs(M(:,7) - Provided_F3) / Provided_F3) * 100; 
+% Delta_F4 = (abs(M(:,8) - Provided_F4) / Provided_F4) * 100;
+% Delta_F5 = (abs(M(:,9) - Provided_F5) / Provided_F5) * 100; 
+% 
+% %Second Coefficients
+% Delta_H3P = (abs(M(:,10) - Provided_H3P) / Provided_H3P) * 100;
+% Delta_F3P = (abs(M(:,11) - Provided_F3P) / Provided_F3P) * 100; 
+% Delta_F4P = (abs(M(:,12) - Provided_F4P) / Provided_F4P) * 100;
+% Delta_F5P = (abs(M(:,13) - Provided_F5P) / Provided_F5P) * 100; 
+
+
+%function that checks validity of a first order configuration given an
+%angle
+function [ax, b1, b] = Valfirst(M,R2,deg)
+iter = deg+2;
+%A matrix
+A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+    M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+    M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+    -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+%b first order matrix (partial diff. wrt theta 2)
+b1= -[R2*sin(M(iter,1));
+    -R2*cos(M(iter,1));
+    -R2*sin(M(iter,1));
+    R2*cos(M(iter,1))];
+
+%first order results from analysis
+x = M(iter,6:9)';
+%A*x=b
+ax = A*x
+
+%check if A*x = b
+b = A*x < b1 + .0005 & A*x > b1 - .0005
+
+end
+
+%function that checks validity of a second order configuration given an
+%angle
+function [ax, b2, b] = Valsec(M,R2,deg)
+iter = deg+2;
+%A matrix
+A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+    M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+    M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+    -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+ %b second order matrix (second partial diff. wrt theta 2)
+b2= -[R2*cos(M(iter,1))- M(iter,3)*(M(iter,6)^2)*cos(M(iter,2)) - 2*M(iter,7)*M(iter,6)*sin(M(iter,2));
+    R2*sin(M(iter,1))- M(iter,3)*(M(iter,6)^2)*sin(M(iter,2)) + 2*M(iter,7)*M(iter,6)*cos(M(iter,2));
+    -R2*cos(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*cos(M(iter,2)) + 2*M(iter,9)*M(iter,6)*sin(M(iter,2));
+    -R2*sin(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*sin(M(iter,2)) - 2*M(iter,9)*M(iter,6)*cos(M(iter,2))];
+
+%second order results from analysis
+x = M(iter,10:13)';
+%A*x=b
+ax = A*x
+
+%check if A*x = b
+b = A*x < b2 + .0005 & A*x > b2 - .0005
+
+end
+
+
+>>>>>>> parent of a621121 (Merge branch '2nd-order' of https://github.com/mattkday/Machine-Design-Project into 2nd-order)
