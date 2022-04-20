@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Kaleb Coleman, Matthew Day, Scott Meyers, Andrew Peterson
-% October 19, 2021
+% October 28, 2021
 % ME4133
-% Project III
+% Project IV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Preliminaries
@@ -22,11 +22,13 @@ t5=(-101*(pi/180));
 R6=1.85; 
 t6=(63*(pi/180));
 
+RCG3 = 1.3;
+
+
 %Import .txt data file as a single matrix
 File_Data = readmatrix('data1');
 
 %Define matrix values to variables to sync two theta and calculate % error
-%for data validation
 theta2_Pre = File_Data(:,1');
 theta3 = File_Data(:,2) ;
 Provided_R3 =File_Data(:,3);
@@ -40,16 +42,18 @@ Provided_F4 =File_Data(:,8);
 Provided_F5 =File_Data(:,9);
 
 %Data Imported from excel for Second Order %error calculation
-%H3P =File_Data(:,10)';
-%F3P =File_Data(:,11)';
-%F4P =File_Data(:,12)';
-%F5P =File_Data(:,13)';
+Provided_H3P =File_Data(:,10);
+Provided_F3P =File_Data(:,11);
+Provided_F4P =File_Data(:,12);
+Provided_F5P =File_Data(:,13);
 
 %Position Analysis -------------------------------------------------------
 
 %Container for position solutions
 M = [];
-
+RG2 = [];
+RG4 = [];
+RG3 = [];
 %Iterators
 I = 0;
 r = 0;
@@ -87,13 +91,8 @@ for t2 = theta2;
     %Results stored in matrix
     M(r,1:5) = [t2,t3,R3,R4,R5];
 end
-M;
 % First Order Coefficients-----------------------------------------------
-% b1= -[R2*sin(t2);
-%     -R2*cos(t2);
-%     -R2*sin(t2);
-%     R2*cos(t2)];
-%iterate through each data set
+%calculate for each data set
 for iter = 1:size(M,1)
     % A position matrix
     A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
@@ -105,32 +104,36 @@ for iter = 1:size(M,1)
         -R2*cos(M(iter,1));
         -R2*sin(M(iter,1));
         R2*cos(M(iter,1))];
-    
+    %x = A\b
     M(iter,6:9) = A\b1;
 end
 %-------------------------------------------------------------------------
 
-%Data Validation by checking our calculations against the provided Excel
-%Sheet data, in the form of percent error
-Delta_t2 = (abs(M(:,1) - theta2_Pre) / theta2_Pre) * 100;
-Delta_t3 = (abs(M(:,2) - Provided_R3) / Provided_R3) * 100;
-Delta_R3 = (abs(M(:,3) - Provided_R3) / Provided_R3) * 100; 
-Delta_R4 = (abs(M(:,4) - Provided_R4) / Provided_R4) * 100;
-Delta_R5 = (abs(M(:,5) - Provided_R5) / Provided_R5) * 100; 
+% Second Order Coefficients-----------------------------------------------
+%calculate for each data set
+for iter = 1:size(M,1)
+    % A position matrix
+    A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+        M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+        M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+        -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+    %b second order matrix (second partial diff. wrt theta 2)
+    b2= -[R2*cos(M(iter,1))- M(iter,3)*(M(iter,6)^2)*cos(M(iter,2)) - 2*M(iter,7)*M(iter,6)*sin(M(iter,2));
+        R2*sin(M(iter,1))- M(iter,3)*(M(iter,6)^2)*sin(M(iter,2)) + 2*M(iter,7)*M(iter,6)*cos(M(iter,2));
+        -R2*cos(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*cos(M(iter,2)) + 2*M(iter,9)*M(iter,6)*sin(M(iter,2));
+        -R2*sin(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*sin(M(iter,2)) - 2*M(iter,9)*M(iter,6)*cos(M(iter,2))];
+    %x = A\b
+    M(iter,10:13) = A\b2;
+end
+%-------------------------------------------------------------------------
+%CG position
+for iter = 1:size(M,1)
+    RG2(iter,1:3) = [M(iter,1),0,0];
+    RG4(iter,1:3) = [M(iter,1),M(iter,4),R1];
+    RG3(iter,1:3) = [M(iter,1),(R1*[0 1]+M(iter,4)*[1 0]+RCG3*[cos(M(iter,2)) sin(M(iter,2))])];
+end
 
-%First Coefficients validation 
-Delta_H3 = (abs(M(:,2) - Provided_H3) / Provided_H3) * 100;
-Delta_F3 = (abs(M(:,3) - Provided_F3) / Provided_F3) * 100; 
-Delta_F4 = (abs(M(:,4) - Provided_F4) / Provided_F4) * 100;
-Delta_F5 = (abs(M(:,5) - Provided_F5) / Provided_F5) * 100; 
-
-%Second Coefficients validation 
-%Delta_H3 = (abs(M(:,2) - Provided_H3) / Provided_H3) * 100;
-%Delta_F3 = (abs(M(:,3) - Provided_F3) / Provided_F3) * 100; 
-%Delta_F4 = (abs(M(:,4) - Provided_F4) / Provided_F4) * 100;
-%Delta_F5 = (abs(M(:,5) - Provided_F5) / Provided_F5) * 100; 
-
- %Position anaylsis graph--------------------------------------------
+%Position anaylsis graph--------------------------------------------
 
 %Define Y-points of graph (t3,r3,r4,r5,h3,f3,f4,f5)
 t3=M(:,2)';
@@ -141,6 +144,10 @@ H3=M(:,6)';
 F3=M(:,7)';
 F4=M(:,8)'; 
 F5=M(:,9)'; 
+H3P=M(:,10)';
+F3P=M(:,11)';
+F4P=M(:,12)';
+F5P=M(:,13)';
 %Local minimums and maximums for theta3, R3, R4, and R5 which are also the
 %link limits for the unknowns
 
@@ -173,14 +180,14 @@ F5_max = islocalmax(F5);
 %Allows multiple data lines on one figure
 hold on  
 
-%Plot the Position Analysis data
+%Plot the computed Position Analysis data
 plot(theta2, t3, 'k', theta2, R3, 'b', theta2, R4, 'm', theta2, R5, 'r')
 
 %Plot the local mins and maxes for data validation (used to compare roots on the First Order Graph)
-plot(theta2(t3_min), t3(t3_min), 'k*', theta2(t3_max), t3(t3_max), 'k*', theta2(R3_min), R3(R3_min), 'b*', theta2(R3_max), R3(R3_max), 'b*', theta2(R4_min), R4(R4_min), 'm*', theta2(R4_max), R4(R4_max), 'm*',  theta2(R5_min), R5(R5_min), 'r*', theta2(R5_max), R5(R5_max), 'r*')
+plot(theta2(t3_min), t3(t3_min), 'ks', theta2(t3_max), t3(t3_max), 'ks', theta2(R3_min), R3(R3_min), 'bs', theta2(R3_max), R3(R3_max), 'bs', theta2(R4_min), R4(R4_min), 'ms', theta2(R4_max), R4(R4_max), 'ms',  theta2(R5_min), R5(R5_min), 'rs', theta2(R5_max), R5(R5_max), 'rs')
 
 %Add legend to make the different lines distinguishable 
-legend('theta3 (rad)', 'R3 (in)','R4 (in)','R5 (in)','Local min or max (all lines)')
+legend('theta3 (rad)', 'R3 (in)','R4 (in)','R5 (in)','Min and Max')
 
 %Define what the graph is
 title('Position Analysis')
@@ -210,7 +217,8 @@ hold on   %Allows multiple data lines on one figure
 
 %Plot the First Order Kinematic Coefficients
 plot(theta2, H3,'k', theta2, F3, 'b', theta2, F4, 'm', theta2, F5, 'r')
-
+%To properly align legend
+plot(theta2(t3_min), 0, 'k*',theta2(H3_min), H3(H3_min), 'ks' )
 %Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
  %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
 plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', theta2(R4_max), 0, 'm*',  theta2(R5_min), 0, 'r*', theta2(R5_max), 0, 'r*')
@@ -218,10 +226,40 @@ plot(theta2(t3_min), 0, 'k*',theta2(R3_min), 0, 'b*', theta2(R3_max), 0, 'b*', t
 %Plot the local mins and maxes for data validation of the Second Order Graph
 % 
 plot(theta2(H3_min), H3(H3_min), 'ks', theta2(H3_max), H3(H3_max), 'ks',theta2(F3_min), F3(F3_min), 'bs', theta2(F3_max), F3(F3_max), 'bs', theta2(F4_min), F4(F4_min), 'ms', theta2(F4_max), F4(F4_max), 'ms',  theta2(F5_min), F5(F5_min), 'rs', theta2(F5_max), F5(F5_max), 'rs')
+
 %Add legend to make the different lines distinguishable 
-legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Local min or max (all lines)');
+legend('H3 (-)', 'F3 (in)','F4 (in)','F5 (in)','Zeros','Min and Max');
 %Define what the graph is
 title('First Order Kinematic Coefficient vs Input')
+%Label the x-axis
+xlabel('\theta_2 (rad)')
+%Label the y-axis
+ylabel('Outputs')
+%Add grids to make data easier to read
+grid on 
+grid minor
+%Used to convert the numerical radian to the simplified version original
+%Sets the increment of values
+set(gca,'XTick',0:pi/4:2*pi) 
+%Defines what the major x-axis grid line should be called
+set(gca,'XTickLabel',{'0','\pi/4','\pi/2','3\pi/4','\pi','5\pi/4','3\pi/2','7\pi/4','2\pi'})
+
+
+%Second order Kinematic Coefficient vs input graph-----------------------
+figure(3) %To setup different data on different plots
+hold on   %Allows multiple data lines on one figure
+
+%Plot the Second Order Kinematic Coefficients
+plot(theta2, H3P,'k', theta2, F3P, 'b', theta2, F4P, 'm', theta2, F5P, 'r')
+
+%Plot the roots that correspond to the local mins and maxes on the Position Analysis Graph
+ %theta2(t3_max), 0, 'k*', theta2(R4_min), 0, 'm*',
+plot(theta2(H3_min), 0, 'k*',theta2(H3_max), 0, 'k*',theta2(F3_min), 0, 'b*', theta2(F3_max), 0, 'b*',theta2(F4_min), 0, 'm*', theta2(F4_max), 0, 'm*',  theta2(F5_min), 0, 'r*', theta2(F5_max), 0, 'r*')
+
+%Add legend to make the different lines distinguishable 
+legend('H3P (-)', 'F3P (in)','F4P (in)','F5P (in)','Zeros');
+%Define what the graph is
+title('Second Order Kinematic Coefficient vs Input')
 %Label the x-axis
 xlabel('\theta_2 (rad)')
 %Label the y-axis
@@ -250,5 +288,90 @@ fprintf('Length 5 Lower Limit %s\n',(min(M(:,5))))
 fprintf('Length 5 Upper Limit %s\n',(max(M(:,5))))
 
 
+%VALIDATION---------------------------------------------------------------
+%First Order
+Valfirst(M,R2,1)
+Valfirst(M,R2,40)
+Valfirst(M,R2,169)
+Valfirst(M,R2,220)
+Valfirst(M,R2,115)
+Valfirst(M,R2,341)
+
+%Second Order
+Valsec(M,R2,1)
+Valsec(M,R2,40)
+Valsec(M,R2,169)
+Valsec(M,R2,220)
+Valsec(M,R2,115)
+Valsec(M,R2,341)
+%--------------------------------------------------------------------------
+% %checking our calculations against the provided Excel
+% %Sheet data, in the form of percent error
+% Delta_t2 = (abs(M(:,1) - theta2_Pre) / theta2_Pre) * 100;
+% Delta_t3 = (abs(M(:,2) - Provided_R3) / Provided_R3) * 100;
+% Delta_R3 = (abs(M(:,3) - Provided_R3) / Provided_R3) * 100; 
+% Delta_R4 = (abs(M(:,4) - Provided_R4) / Provided_R4) * 100;
+% Delta_R5 = (abs(M(:,5) - Provided_R5) / Provided_R5) * 100; 
+% 
+% %First Coefficients 
+% Delta_H3 = (abs(M(:,6) - Provided_H3) / Provided_H3) * 100;
+% Delta_F3 = (abs(M(:,7) - Provided_F3) / Provided_F3) * 100; 
+% Delta_F4 = (abs(M(:,8) - Provided_F4) / Provided_F4) * 100;
+% Delta_F5 = (abs(M(:,9) - Provided_F5) / Provided_F5) * 100; 
+% 
+% %Second Coefficients
+% Delta_H3P = (abs(M(:,10) - Provided_H3P) / Provided_H3P) * 100;
+% Delta_F3P = (abs(M(:,11) - Provided_F3P) / Provided_F3P) * 100; 
+% Delta_F4P = (abs(M(:,12) - Provided_F4P) / Provided_F4P) * 100;
+% Delta_F5P = (abs(M(:,13) - Provided_F5P) / Provided_F5P) * 100; 
 
 
+%function that checks validity of a first order configuration given an
+%angle
+function [ax, b1, b] = Valfirst(M,R2,deg)
+iter = deg+2;
+%A matrix
+A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+    M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+    M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+    -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+%b first order matrix (partial diff. wrt theta 2)
+b1= -[R2*sin(M(iter,1));
+    -R2*cos(M(iter,1));
+    -R2*sin(M(iter,1));
+    R2*cos(M(iter,1))];
+
+%first order results from analysis
+x = M(iter,6:9)';
+%A*x=b
+ax = A*x
+
+%check if A*x = b
+b = A*x < b1 + .0005 & A*x > b1 - .0005
+
+end
+
+%function that checks validity of a second order configuration given an
+%angle
+function [ax, b2, b] = Valsec(M,R2,deg)
+iter = deg+2;
+%A matrix
+A = [-M(iter,3)*sin(M(iter,2)) cos(M(iter,2)) 1 0;
+    M(iter,3)*cos(M(iter,2)) sin(M(iter,2)) 0 0;
+    M(iter,5)*sin(M(iter,2)) 0 0 -cos(M(iter,2));
+    -M(iter,5)*cos(M(iter,2)) 0 0 -sin(M(iter,2))];
+ %b second order matrix (second partial diff. wrt theta 2)
+b2= -[R2*cos(M(iter,1))- M(iter,3)*(M(iter,6)^2)*cos(M(iter,2)) - 2*M(iter,7)*M(iter,6)*sin(M(iter,2));
+    R2*sin(M(iter,1))- M(iter,3)*(M(iter,6)^2)*sin(M(iter,2)) + 2*M(iter,7)*M(iter,6)*cos(M(iter,2));
+    -R2*cos(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*cos(M(iter,2)) + 2*M(iter,9)*M(iter,6)*sin(M(iter,2));
+    -R2*sin(M(iter,1))+ M(iter,5)*(M(iter,6)^2)*sin(M(iter,2)) - 2*M(iter,9)*M(iter,6)*cos(M(iter,2))];
+
+%second order results from analysis
+x = M(iter,10:13)';
+%A*x=b
+ax = A*x
+
+%check if A*x = b
+b = A*x < b2 + .0005 & A*x > b2 - .0005
+
+end
